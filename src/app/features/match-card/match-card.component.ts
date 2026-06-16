@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
 
       <div class="flex flex-col gap-4">
         <!-- Teams & Score -->
-        <div class="flex justify-between items-center px-2">
+        <div class="flex justify-between items-center">
 
           <!-- Team 1 -->
           <div class="flex flex-col items-center gap-2 w-[40%] text-center">
