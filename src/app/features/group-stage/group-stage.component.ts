@@ -4,11 +4,14 @@ import { WorldCupService } from '../../core/services/world-cup.service';
 import { GroupResult } from '../../core/models/match.model';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
+import { Dialog } from 'primeng/dialog';
+import { GroupHistoryCardComponent } from '../group-history-card/group-history-card.component';
+import { Match } from '../../core/models/match.model';
 
 @Component({
   selector: 'app-group-stage',
   standalone: true,
-  imports: [CommonModule, TableModule, Button],
+  imports: [CommonModule, TableModule, Button, Dialog, GroupHistoryCardComponent],
   template: `
     <div class="flex flex-col gap-6 p-4 max-w-7xl mx-auto">
       <div class="flex justify-center">
@@ -25,8 +28,9 @@ import { Button } from 'primeng/button';
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           @for (group of visibleGroups(); track group.groupName) {
             <div class="bg-surface-900 rounded-xl overflow-hidden border border-surface-800">
-              <div class="bg-surface-800 px-4 py-3 font-bold text-lg text-primary-400">
-                {{ group.groupName }}
+              <div class="bg-surface-800 px-4 py-3 font-bold text-lg text-primary-400 flex justify-between items-center">
+                <span>{{ group.groupName }}</span>
+                <p-button severity="help" icon="pi pi-eye" label="Histórico" [text]="true" size="small" (onClick)="showHistory(group.groupName)"></p-button>
               </div>
               <p-table [value]="group.results" [tableStyle]="{ 'min-width': '100%' }" size="small">
                 <ng-template pTemplate="header">
@@ -89,6 +93,14 @@ import { Button } from 'primeng/button';
             <span><strong class="text-surface-200">SG:</strong> Saldo de Gols</span>
           </div>
         </div>
+
+        <p-dialog [header]="'Histórico de Jogos - ' + selectedGroup()" [(visible)]="historyDialogVisible" [modal]="true" [style]="{ width: '90vw', maxWidth: '600px' }" [contentStyle]="{ padding: '0' }" [dismissableMask]="true">
+          <div class="flex flex-col">
+            @for (match of selectedGroupMatches(); track match.num) {
+              <app-group-history-card [match]="match" class="border-b border-surface-800 last:border-b-0"></app-group-history-card>
+            }
+          </div>
+        </p-dialog>
       }
     </div>
   `,
@@ -102,6 +114,10 @@ export class GroupStageComponent implements OnInit {
   private worldCupService = inject(WorldCupService);
 
   loading = this.worldCupService.loading;
+
+  historyDialogVisible = false;
+  selectedGroup = signal<string>('');
+  selectedGroupMatches = signal<Match[]>([]);
 
   // Computes the standings from all matches
   groupStandings = computed(() => {
@@ -191,6 +207,13 @@ export class GroupStageComponent implements OnInit {
 
   loadMore() {
     this.limit.update(val => val + 4);
+  }
+
+  showHistory(groupName: string) {
+    const matches = this.worldCupService.matches().filter(m => m.group === groupName);
+    this.selectedGroupMatches.set(matches);
+    this.selectedGroup.set(groupName);
+    this.historyDialogVisible = true;
   }
 
   ngOnInit() {
