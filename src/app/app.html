@@ -1,1 +1,33 @@
-<router-outlet />
+<div class="min-h-screen bg-surface-950 text-surface-0 font-sans">
+  <nav class="bg-black border-b border-surface-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center">
+      <div class="flex items-center gap-3">
+        <p-button icon="pi pi-bars" (click)="drawerVisible.set(true)" variant="text" severity="secondary" rounded />
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-xl tracking-tight">Copa do Mundo 2026</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <p-drawer [visible]="drawerVisible()" (visibleChange)="drawerVisible.set($event)" header="Menu">
+    <div class="flex flex-col gap-2 bg-surface-900 border-t border-surface-800">
+      <a routerLink="/schedule" routerLinkActive="bg-surface-800 text-primary-300" (click)="drawerVisible.set(false)" class="px-4 py-3 rounded-md font-medium text-surface-200 hover:bg-surface-800 transition-colors flex items-center gap-3">
+        <i class="pi pi-calendar"></i>
+        Jogos
+      </a>
+      <a routerLink="/groups" routerLinkActive="bg-surface-800 text-primary-300" (click)="drawerVisible.set(false)" class="px-4 py-3 rounded-md font-medium text-surface-200 hover:bg-surface-800 transition-colors flex items-center gap-3">
+        <i class="pi pi-table"></i>
+        Grupos
+      </a>
+    </div>
+  </p-drawer>
+
+  <main class="py-6">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="bg-surface-900 border-t border-surface-800 py-4 text-center text-surface-400 text-sm mt-auto">
+    <p>Salve salve</p>
+  </footer>
+</div>

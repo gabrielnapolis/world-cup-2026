@@ -10,7 +10,13 @@ import { TableModule } from 'primeng/table';
   imports: [CommonModule, TableModule],
   template: `
     <div class="flex flex-col gap-6 p-4 max-w-7xl mx-auto">
-      <h1 class="text-3xl font-bold m-0">Classificação da Fase de Grupos</h1>
+      <div class="flex justify-center">
+        <img src="world-cup-white.png" alt="Copa 2026 Logo" class="w-40 md:w-32" />
+      </div>
+      <div class="flex justify-center">
+        <h1 class="text-xl font-bold m-0">Classificação da Fase de Grupos</h1>
+      </div>
+
 
       @if (loading()) {
         <div>Carregando...</div>
@@ -38,13 +44,13 @@ import { TableModule } from 'primeng/table';
                 <ng-template pTemplate="body" let-result let-i="rowIndex">
                   <tr [ngClass]="{'bg-green-900/20': i < 2}"> <!-- Destacar classificados (top 2) -->
                     <td class="flex items-center gap-2">
-                      <img 
-                        [src]="'https://flagcdn.com/w20/' + result.team.code + '.png'" 
+                      <img
+                        [src]="'https://flagcdn.com/w20/' + result.team.code + '.png'"
                         [alt]="result.team.name"
                         class="w-5"
                         onerror="this.src='https://flagcdn.com/w20/un.png'"
                       />
-                      <span class="font-semibold">{{ result.team.name }}</span>
+                      <span class="">{{ result.team.name }}</span>
                     </td>
                     <td class="text-center font-bold text-primary-300">{{ result.points }}</td>
                     <td class="text-center">{{ result.played }}</td>
@@ -62,6 +68,20 @@ import { TableModule } from 'primeng/table';
             <div class="col-span-full text-center text-surface-400">Nenhum dado de grupo encontrado.</div>
           }
         </div>
+
+        <div class="mt-6 bg-surface-900 border border-surface-800 rounded-xl p-4 text-sm text-surface-400">
+          <h3 class="font-bold text-surface-200 mb-2">Legenda</h3>
+          <div class="flex flex-wrap gap-x-6 gap-y-2">
+            <span><strong class="text-primary-400">P:</strong> Pontos</span>
+            <span><strong class="text-surface-200">J:</strong> Jogos</span>
+            <span><strong class="text-surface-200">V:</strong> Vitórias</span>
+            <span><strong class="text-surface-200">E:</strong> Empates</span>
+            <span><strong class="text-surface-200">D:</strong> Derrotas</span>
+            <span><strong class="text-surface-200">GP:</strong> Gols Pró</span>
+            <span><strong class="text-surface-200">GC:</strong> Gols Contra</span>
+            <span><strong class="text-surface-200">SG:</strong> Saldo de Gols</span>
+          </div>
+        </div>
       }
     </div>
   `,
@@ -73,14 +93,14 @@ import { TableModule } from 'primeng/table';
 })
 export class GroupStageComponent implements OnInit {
   private worldCupService = inject(WorldCupService);
-  
+
   loading = this.worldCupService.loading;
-  
+
   // Computes the standings from all matches
   groupStandings = computed(() => {
     const matches = this.worldCupService.matches();
     const groupMatches = matches.filter(m => m.group);
-    
+
     // Group by groupName
     const groupsMap = new Map<string, Map<string, GroupResult>>();
 
@@ -107,7 +127,7 @@ export class GroupStageComponent implements OnInit {
       // If match is finished, calculate points
       if (match.score && match.score.ft) {
         const [gf1, gf2] = match.score.ft;
-        
+
         t1Result.played++;
         t1Result.goalsFor += gf1;
         t1Result.goalsAgainst += gf2;
