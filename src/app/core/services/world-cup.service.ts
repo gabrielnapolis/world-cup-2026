@@ -63,6 +63,8 @@ const TRANSLATIONS: Record<string, string> = {
   Norway: 'Noruega',
   Iraq: 'Iraque',
   Turkey: 'Turquia',
+  Ghana: 'Gana',
+  Austria: 'Áustria',
   'Round of 32': 'Segunda Fase',
   'Round of 16': 'Oitavas de Final',
   'Quarter-final': 'Quartas de Final',
