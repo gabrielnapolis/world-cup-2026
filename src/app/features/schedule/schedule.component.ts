@@ -18,11 +18,9 @@ export class ScheduleComponent implements OnInit {
   matches = this.worldCupService.matches;
   loading = this.worldCupService.loading;
 
-
   selectedDateStr = signal<string>('');
   selectedStage = signal('Todos');
   selectedGroup = signal('Todos');
-
 
   availableDates = computed(() => {
     const allMatches = this.matches();
