@@ -1,4 +1,4 @@
-import { Component, Input, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { Match } from '../../core/models/match.model';
 import { Card } from 'primeng/card';
 import { Tag } from 'primeng/tag';
@@ -21,10 +21,8 @@ import { CommonModule } from '@angular/common';
       </ng-template>
 
       <div class="flex flex-col gap-4">
-        <!-- Teams & Score -->
         <div class="flex justify-between items-center">
 
-          <!-- Team 1 -->
           <div class="flex flex-col items-center gap-2 w-[40%] text-center">
             <img
               [src]="'https://flagcdn.com/w40/' + match().team1.code + '.png'"
@@ -37,7 +35,6 @@ import { CommonModule } from '@angular/common';
             </span>
           </div>
 
-          <!-- Score or Time -->
           <div class="flex flex-col items-center justify-center w-[20%]">
             @if (match().score?.ft) {
               <div class="flex flex-col items-center gap-1">
@@ -58,7 +55,6 @@ import { CommonModule } from '@angular/common';
             }
           </div>
 
-          <!-- Team 2 -->
           <div class="flex flex-col items-center gap-2 w-[40%] text-center">
             <img
               [src]="'https://flagcdn.com/w40/' + match().team2.code + '.png'"
@@ -74,7 +70,6 @@ import { CommonModule } from '@angular/common';
 
         <p-divider class="my-1"></p-divider>
 
-        <!-- Stadium info & Goals Button -->
         <div class="flex justify-between items-center text-sm text-surface-400">
           <div class="flex items-center gap-1">
             <i class="pi pi-map-marker text-xs"></i>
@@ -93,7 +88,7 @@ import { CommonModule } from '@angular/common';
     <p-dialog header="Gols da Partida" [(visible)]="goalsDialogVisible" [modal]="true" [style]="{ width: '25rem' }">
       <div class="flex flex-col gap-4">
         <div class="flex justify-between">
-          <!-- Team 1 Goals -->
+
           <div class="w-1/2 flex flex-col gap-2 border-r border-surface-200 dark:border-surface-700 pr-2">
             <div class="flex items-center gap-2 mb-2 font-semibold">
               <img
@@ -115,7 +110,6 @@ import { CommonModule } from '@angular/common';
             }
           </div>
 
-          <!-- Team 2 Goals -->
           <div class="w-1/2 flex flex-col gap-2 pl-2">
             <div class="flex items-center gap-2 mb-2 font-semibold justify-end">
               <span class="truncate">{{ match().team2.name }}</span>
