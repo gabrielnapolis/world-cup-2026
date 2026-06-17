@@ -272,22 +272,27 @@ export class WorldCupService {
   private calculateStatus(
     localDate: Date,
     score?: { ft: [number, number] },
-  ): 'Hoje' | 'Amanhã' | 'Encerrado' | 'Futuro' {
+  ): 'Passando Agora' | 'Hoje' | 'Amanhã' | 'Encerrado' | 'Futuro' {
     if (score && score.ft && score.ft.length === 2) {
       return 'Encerrado';
     }
 
     const now = new Date();
-    // Normalize to start of day in local time for comparison
     const todayStr = now.toLocaleDateString('pt-BR');
     const tomorrowStr = new Date(now.getTime() + 86400000).toLocaleDateString('pt-BR');
 
     const matchDateStr = localDate.toLocaleDateString('pt-BR');
 
+    const matchEndTime = new Date(localDate.getTime() + 120 * 60000);
+
+    if (now >= localDate && now <= matchEndTime) {
+      return 'Passando Agora';
+    }
+
     if (matchDateStr === todayStr) {
       // It could also be Encerrado if time passed, but we'll rely on score for that,
       // or if you want to consider time:
-      if (localDate.getTime() + 120 * 60000 < now.getTime()) {
+      if (now > matchEndTime) {
         return 'Encerrado'; // assuming a match takes ~2 hours
       }
       return 'Hoje';

@@ -28,7 +28,7 @@ export interface Match {
 
   // Custom properties added for app logic
   localDate: Date;
-  status: 'Hoje' | 'Amanhã' | 'Encerrado' | 'Futuro';
+  status: 'Passando Agora' | 'Hoje' | 'Amanhã' | 'Encerrado' | 'Futuro';
 }
 
 export interface GroupResult {
