@@ -14,7 +14,7 @@
     </div>
   } @else {
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      @for (scorer of topScorers(); track scorer.name + scorer.team.code) {
+      @for (scorer of visibleScorers(); track scorer.name + scorer.team.code) {
         <p-card class="h-full bg-surface-900 border border-surface-800 shadow-sm hover:border-primary-500 transition-colors">
           <div class="flex flex-col items-center p-4">
             <div class="relative mb-4">
@@ -37,5 +37,11 @@
         </p-card>
       }
     </div>
+
+    @if (hasMore()) {
+      <div class="flex justify-center mt-8 mb-4">
+        <p-button label="Ver mais" icon="pi pi-plus" (onClick)="loadMore()" severity="secondary" rounded />
+      </div>
+    }
   }
 </div>

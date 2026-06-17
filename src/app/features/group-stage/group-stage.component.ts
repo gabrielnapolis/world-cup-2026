@@ -1,13 +1,14 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorldCupService } from '../../core/services/world-cup.service';
 import { GroupResult } from '../../core/models/match.model';
 import { TableModule } from 'primeng/table';
+import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-group-stage',
   standalone: true,
-  imports: [CommonModule, TableModule],
+  imports: [CommonModule, TableModule, Button],
   template: `
     <div class="flex flex-col gap-6 p-4 max-w-7xl mx-auto">
       <div class="flex justify-center">
@@ -22,7 +23,7 @@ import { TableModule } from 'primeng/table';
         <div>Carregando...</div>
       } @else {
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          @for (group of groupStandings(); track group.groupName) {
+          @for (group of visibleGroups(); track group.groupName) {
             <div class="bg-surface-900 rounded-xl overflow-hidden border border-surface-800">
               <div class="bg-surface-800 px-4 py-3 font-bold text-lg text-primary-400">
                 {{ group.groupName }}
@@ -68,6 +69,12 @@ import { TableModule } from 'primeng/table';
             <div class="col-span-full text-center text-surface-400">Nenhum dado de grupo encontrado.</div>
           }
         </div>
+
+        @if (hasMoreGroups()) {
+          <div class="flex justify-center mt-6">
+            <p-button label="Ver mais" icon="pi pi-plus" (onClick)="loadMore()" severity="secondary" rounded />
+          </div>
+        }
 
         <div class="mt-6 bg-surface-900 border border-surface-800 rounded-xl p-4 text-sm text-surface-400">
           <h3 class="font-bold text-surface-200 mb-2">Legenda</h3>
@@ -171,6 +178,20 @@ export class GroupStageComponent implements OnInit {
 
     return finalStandings;
   });
+
+  limit = signal<number>(4);
+
+  visibleGroups = computed(() => {
+    return this.groupStandings().slice(0, this.limit());
+  });
+
+  hasMoreGroups = computed(() => {
+    return this.groupStandings().length > this.limit();
+  });
+
+  loadMore() {
+    this.limit.update(val => val + 4);
+  }
 
   ngOnInit() {
     if (this.worldCupService.matches().length === 0) {
