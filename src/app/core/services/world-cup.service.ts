@@ -2,12 +2,85 @@ import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Match, Team } from '../models/match.model';
 
+const TRANSLATIONS: Record<string, string> = {
+  // Países
+  Brazil: 'Brasil',
+  Germany: 'Alemanha',
+  Spain: 'Espanha',
+  England: 'Inglaterra',
+  Netherlands: 'Holanda',
+  Italy: 'Itália',
+  France: 'França',
+  Croatia: 'Croácia',
+  Belgium: 'Bélgica',
+  Switzerland: 'Suíça',
+  Denmark: 'Dinamarca',
+  Sweden: 'Suécia',
+  Poland: 'Polônia',
+  Serbia: 'Sérvia',
+  'Czech Republic': 'República Tcheca',
+  'Bosnia & Herzegovina': 'Bósnia e Herzegovina',
+  Uzbekistan: 'Uzbequistão',
+  Scotland: 'Escócia',
+  Wales: 'País de Gales',
+  'Northern Ireland': 'Irlanda do Norte',
+  'Republic of Ireland': 'Irlanda',
+  Mexico: 'México',
+  USA: 'Estados Unidos',
+  Canada: 'Canadá',
+  Panama: 'Panamá',
+  'Costa Rica': 'Costa Rica',
+  Jamaica: 'Jamaica',
+  'El Salvador': 'El Salvador',
+  Honduras: 'Honduras',
+  Uruguay: 'Uruguai',
+  Colombia: 'Colômbia',
+  Chile: 'Chile',
+  Ecuador: 'Equador',
+  Peru: 'Peru',
+  Venezuela: 'Venezuela',
+  Paraguay: 'Paraguai',
+  Bolivia: 'Bolívia',
+  Argentina: 'Argentina',
+  Japan: 'Japão',
+  'South Korea': 'Coreia do Sul',
+  'Saudi Arabia': 'Arábia Saudita',
+  Iran: 'Irã',
+  Jordan: 'Jordânia',
+  'DR Congo': 'R. do Congo',
+  Australia: 'Austrália',
+  'Cape Verde': 'Cabo Verde',
+  Qatar: 'Catar',
+  Senegal: 'Senegal',
+  Morocco: 'Marrocos',
+  Cameroon: 'Camarões',
+  Nigeria: 'Nigéria',
+  Algeria: 'Argélia',
+  Egypt: 'Egito',
+  Tunisia: 'Tunísia',
+  'Ivory Coast': 'Costa do Marfim',
+  'South Africa': 'África do Sul',
+  'New Zealand': 'Nova Zelândia',
+  Norway: 'Noruega',
+  Iraq: 'Iraque',
+  Turkey: 'Turquia',
+  // Fases
+  'Round of 32': '16-avos de Final',
+  'Round of 16': 'Oitavas de Final',
+  'Quarter-finals': 'Quartas de Final',
+  'Semi-finals': 'Semifinais',
+  Final: 'Final',
+  'Match for third place': 'Decisão do 3º Lugar',
+  'Play-off for third place': 'Decisão do 3º Lugar',
+};
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WorldCupService {
   private http = inject(HttpClient);
-  private readonly apiUrl = 'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
+  private readonly apiUrl =
+    'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
 
   // State
   matches = signal<Match[]>([]);
@@ -16,18 +89,72 @@ export class WorldCupService {
 
   // Partial mapping for some known teams to ISO alpha-2
   private countryToIsoMap: Record<string, string> = {
-    'Argentina': 'ar', 'Brazil': 'br', 'France': 'fr', 'Germany': 'de', 'Italy': 'it',
-    'Spain': 'es', 'England': 'gb-eng', 'Netherlands': 'nl', 'Portugal': 'pt', 'Belgium': 'be',
-    'Mexico': 'mx', 'USA': 'us', 'Canada': 'ca', 'Uruguay': 'uy', 'Colombia': 'co',
-    'Japan': 'jp', 'South Korea': 'kr', 'Senegal': 'sn', 'Morocco': 'ma', 'Croatia': 'hr',
-    'Switzerland': 'ch', 'Serbia': 'rs', 'Denmark': 'dk', 'Sweden': 'se', 'Poland': 'pl',
-    'South Africa': 'za', 'Czech Republic': 'cz', 'Bosnia & Herzegovina': 'ba', 'Qatar': 'qa',
-    'Chile': 'cl', 'Ecuador': 'ec', 'Peru': 'pe', 'Venezuela': 've', 'Paraguay': 'py',
-    'Bolivia': 'bo', 'Cameroon': 'cm', 'Nigeria': 'ng', 'Algeria': 'dz', 'Egypt': 'eg',
-    'Tunisia': 'tn', 'Mali': 'ml', 'Ghana': 'gh', 'Ivory Coast': 'ci', 'Australia': 'au',
-    'Iran': 'ir', 'Saudi Arabia': 'sa', 'Costa Rica': 'cr', 'Panama': 'pa', 'Honduras': 'hn',
-    'Jamaica': 'jm', 'El Salvador': 'sv', 'New Zealand': 'nz', 'Wales': 'gb-wls',
-    'Scotland': 'gb-sct', 'Northern Ireland': 'gb-nir', 'Republic of Ireland': 'ie'
+    Argentina: 'ar',
+    Brazil: 'br',
+    France: 'fr',
+    Germany: 'de',
+    Italy: 'it',
+    Spain: 'es',
+    England: 'gb-eng',
+    Netherlands: 'nl',
+    Portugal: 'pt',
+    Belgium: 'be',
+    Mexico: 'mx',
+    USA: 'us',
+    Canada: 'ca',
+    Uruguay: 'uy',
+    Colombia: 'co',
+    Japan: 'jp',
+    'South Korea': 'kr',
+    Senegal: 'sn',
+    Morocco: 'ma',
+    Croatia: 'hr',
+    Switzerland: 'ch',
+    Serbia: 'rs',
+    Denmark: 'dk',
+    Sweden: 'se',
+    Poland: 'pl',
+    'South Africa': 'za',
+    'Czech Republic': 'cz',
+    'Bosnia & Herzegovina': 'ba',
+    Qatar: 'qa',
+    Chile: 'cl',
+    Ecuador: 'ec',
+    Peru: 'pe',
+    Venezuela: 've',
+    Paraguay: 'py',
+    Bolivia: 'bo',
+    Cameroon: 'cm',
+    Nigeria: 'ng',
+    Algeria: 'dz',
+    Egypt: 'eg',
+    Tunisia: 'tn',
+    Mali: 'ml',
+    Ghana: 'gh',
+    'Ivory Coast': 'ci',
+    Australia: 'au',
+    Iran: 'ir',
+    'Saudi Arabia': 'sa',
+    'Costa Rica': 'cr',
+    Panama: 'pa',
+    Honduras: 'hn',
+    Jamaica: 'jm',
+    'El Salvador': 'sv',
+    'New Zealand': 'nz',
+    Wales: 'gb-wls',
+    Scotland: 'gb-sct',
+    'Northern Ireland': 'gb-nir',
+    'Republic of Ireland': 'ie',
+    'DR Congo': 'cd',
+    'Cape Verde': 'cv',
+    Haiti: 'ht',
+    Norway: 'no',
+    Iraq: 'iq',
+    Turkey: 'tr',
+    Uzbekistan: 'uz',
+    Jordan: 'jo',
+    'Curaçao': 'cw',
+    Austria: 'at',
   };
 
   constructor() {}
@@ -47,42 +174,45 @@ export class WorldCupService {
         console.error('Error fetching matches', err);
         this.error.set('Failed to load matches.');
         this.loading.set(false);
-      }
+      },
     });
   }
 
   private parseMatches(data: any): Match[] {
     const apiMatches = data.matches || [];
     return apiMatches.map((m: any, index: number) => {
-
       const localDate = this.parseLocalDate(m.date, m.time);
 
       const team1Name = m.team1;
       const team2Name = m.team2;
+
+      // Traduz "Group A" para "Grupo A"
+      const groupName = m.group ? m.group.replace('Group', 'Grupo') : undefined;
+      const stageName = groupName ? groupName : TRANSLATIONS[m.round] || m.round;
 
       const match: Match = {
         num: index + 1,
         date: m.date,
         time: m.time,
         team1: {
-          name: team1Name,
-          code: this.countryToIsoMap[team1Name] || 'un' // 'un' for unknown or fallback
+          name: TRANSLATIONS[team1Name] || team1Name,
+          code: this.countryToIsoMap[team1Name] || 'un', // 'un' for unknown or fallback
         },
         team2: {
-          name: team2Name,
-          code: this.countryToIsoMap[team2Name] || 'un'
+          name: TRANSLATIONS[team2Name] || team2Name,
+          code: this.countryToIsoMap[team2Name] || 'un',
         },
-        group: m.group,
-        stage: m.group ? m.group : m.round,
+        group: groupName,
+        stage: stageName,
         stadium: {
           name: m.ground,
-          city: m.ground // Depending on API
+          city: m.ground, // Depending on API
         },
         score: m.score,
         goals1: m.goals1,
         goals2: m.goals2,
         localDate: localDate,
-        status: this.calculateStatus(localDate, m.score)
+        status: this.calculateStatus(localDate, m.score),
       };
 
       return match;
@@ -92,7 +222,7 @@ export class WorldCupService {
   private parseLocalDate(dateStr: string, timeStr: string): Date {
     // timeStr looks like "13:00 UTC-6"
     if (!timeStr) {
-        return new Date(dateStr + 'T00:00:00Z');
+      return new Date(dateStr + 'T00:00:00Z');
     }
     const [time, tz] = timeStr.split(' ');
     let isoOffset = 'Z';
@@ -112,7 +242,10 @@ export class WorldCupService {
     return new Date(isoString);
   }
 
-  private calculateStatus(localDate: Date, score?: { ft: [number, number] }): 'Hoje' | 'Amanhã' | 'Encerrado' | 'Futuro' {
+  private calculateStatus(
+    localDate: Date,
+    score?: { ft: [number, number] },
+  ): 'Hoje' | 'Amanhã' | 'Encerrado' | 'Futuro' {
     if (score && score.ft && score.ft.length === 2) {
       return 'Encerrado';
     }
@@ -127,7 +260,7 @@ export class WorldCupService {
     if (matchDateStr === todayStr) {
       // It could also be Encerrado if time passed, but we'll rely on score for that,
       // or if you want to consider time:
-      if (localDate.getTime() + (120 * 60000) < now.getTime()) {
+      if (localDate.getTime() + 120 * 60000 < now.getTime()) {
         return 'Encerrado'; // assuming a match takes ~2 hours
       }
       return 'Hoje';
