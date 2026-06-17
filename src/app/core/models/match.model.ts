@@ -42,3 +42,9 @@ export interface GroupResult {
   goalDifference: number;
   points: number;
 }
+
+export interface TopScorer {
+  name: string;
+  team: Team;
+  goals: number;
+}

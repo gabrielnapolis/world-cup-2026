@@ -1,0 +1,41 @@
+<div class="max-w-7xl mx-auto px-4">
+  <div class="flex flex-col items-center gap-4 mb-4">
+    <img src="world-cup-white.png" alt="Copa 2026 Logo" class="w-40 md:w-32" />
+    <h1 class="text-xl font-bold tracking-tight text-surface-0 flex items-center gap-3">
+      Saldo de gols por jogador
+    </h1>
+  </div>
+
+  @if (topScorers().length === 0) {
+    <div class="flex flex-col items-center justify-center p-12 bg-surface-900 rounded-xl border border-surface-800 text-center">
+      <i class="pi pi-inbox text-5xl text-surface-500 mb-4"></i>
+      <h2 class="text-xl font-semibold text-surface-200 mb-2">Nenhum gol registrado</h2>
+      <p class="text-surface-400">Ainda não há dados de artilharia disponíveis para as partidas.</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      @for (scorer of topScorers(); track scorer.name + scorer.team.code) {
+        <p-card class="h-full bg-surface-900 border border-surface-800 shadow-sm hover:border-primary-500 transition-colors">
+          <div class="flex flex-col items-center p-4">
+            <div class="relative mb-4">
+              <img
+                [src]="'https://flagcdn.com/w80/' + scorer.team.code + '.png'"
+                [alt]="scorer.team.name + ' flag'"
+                class="w-20 h-20 object-cover rounded-full border-4 border-surface-800 shadow-md"
+                onerror="this.src='https://flagcdn.com/w80/un.png'"
+              />
+              <p-tag
+                [value]="scorer.goals.toString()"
+                severity="contrast"
+                class="absolute -bottom-2 -right-2 text-xl font-bold w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 border-surface-900">
+              </p-tag>
+            </div>
+
+            <h3 class="text-xl font-bold text-surface-0 text-center line-clamp-1 mb-1">{{ scorer.name }}</h3>
+            <span class="text-surface-400 text-sm">{{ scorer.team.name }}</span>
+          </div>
+        </p-card>
+      }
+    </div>
+  }
+</div>

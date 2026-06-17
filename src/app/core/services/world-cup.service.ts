@@ -1,9 +1,8 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Match, Team } from '../models/match.model';
+import { Match, TopScorer } from '../models/match.model';
 
 const TRANSLATIONS: Record<string, string> = {
-  // Países
   Brazil: 'Brasil',
   Germany: 'Alemanha',
   Spain: 'Espanha',
@@ -64,10 +63,9 @@ const TRANSLATIONS: Record<string, string> = {
   Norway: 'Noruega',
   Iraq: 'Iraque',
   Turkey: 'Turquia',
-  // Fases
-  'Round of 32': '16-avos de Final',
+  'Round of 32': 'Segunda Fase',
   'Round of 16': 'Oitavas de Final',
-  'Quarter-finals': 'Quartas de Final',
+  'Quarter-final': 'Quartas de Final',
   'Semi-finals': 'Semifinais',
   Final: 'Final',
   'Match for third place': 'Decisão do 3º Lugar',
@@ -82,12 +80,40 @@ export class WorldCupService {
   private readonly apiUrl =
     'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
 
-  // State
   matches = signal<Match[]>([]);
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
 
-  // Partial mapping for some known teams to ISO alpha-2
+  topScorers = computed<TopScorer[]>(() => {
+    const scorersMap = new Map<string, TopScorer>();
+
+    this.matches().forEach((m) => {
+      if (m.goals1) {
+        m.goals1.forEach((g) => {
+          const key = `${g.name}-${m.team1.name}`;
+          if (!scorersMap.has(key)) {
+            scorersMap.set(key, { name: g.name, team: m.team1, goals: 0 });
+          }
+          scorersMap.get(key)!.goals++;
+        });
+      }
+
+      if (m.goals2) {
+        m.goals2.forEach((g) => {
+          const key = `${g.name}-${m.team2.name}`;
+          if (!scorersMap.has(key)) {
+            scorersMap.set(key, { name: g.name, team: m.team2, goals: 0 });
+          }
+          scorersMap.get(key)!.goals++;
+        });
+      }
+    });
+
+    return Array.from(scorersMap.values()).sort(
+      (a, b) => b.goals - a.goals || a.name.localeCompare(b.name)
+    );
+  });
+
   private countryToIsoMap: Record<string, string> = {
     Argentina: 'ar',
     Brazil: 'br',
@@ -165,7 +191,6 @@ export class WorldCupService {
     this.http.get<any>(this.apiUrl).subscribe({
       next: (data) => {
         const parsedMatches = this.parseMatches(data);
-        // Sort by localDate by default
         parsedMatches.sort((a, b) => a.localDate.getTime() - b.localDate.getTime());
         this.matches.set(parsedMatches);
         this.loading.set(false);

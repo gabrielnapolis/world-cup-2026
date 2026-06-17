@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-surface-950 text-surface-0 font-sans">
+<div class="min-h-screen bg-black text-surface-0 font-sans">
   <nav class="bg-black border-b border-surface-800 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 h-16 flex items-center">
       <div class="flex items-center gap-3">
@@ -12,13 +12,17 @@
 
   <p-drawer [visible]="drawerVisible()" (visibleChange)="drawerVisible.set($event)" header="Menu">
     <div class="flex flex-col gap-2 bg-surface-900 border-t border-surface-800">
-      <a routerLink="/schedule" routerLinkActive="bg-surface-800 text-primary-300" (click)="drawerVisible.set(false)" class="px-4 py-3 rounded-md font-medium text-surface-200 hover:bg-surface-800 transition-colors flex items-center gap-3">
+      <a routerLink="/schedule" routerLinkActive="bg-surface-800 text-primary-300" (click)="drawerVisible.set(false)" class="px-4 py-3 rounded-md text-surface-200 hover:bg-surface-800 transition-colors flex items-center gap-3">
         <i class="pi pi-calendar"></i>
         Jogos
       </a>
-      <a routerLink="/groups" routerLinkActive="bg-surface-800 text-primary-300" (click)="drawerVisible.set(false)" class="px-4 py-3 rounded-md font-medium text-surface-200 hover:bg-surface-800 transition-colors flex items-center gap-3">
+      <a routerLink="/groups" routerLinkActive="bg-surface-800 text-primary-300" (click)="drawerVisible.set(false)" class="px-4 py-3 rounded-md text-surface-200 hover:bg-surface-800 transition-colors flex items-center gap-3">
         <i class="pi pi-table"></i>
         Grupos
+      </a>
+      <a routerLink="/top-scorers" routerLinkActive="bg-surface-800 text-primary-300" (click)="drawerVisible.set(false)" class="px-4 py-3 rounded-md text-surface-200 hover:bg-surface-800 transition-colors flex items-center gap-3">
+        <i class="pi pi-star"></i>
+        Artilheiros
       </a>
     </div>
   </p-drawer>

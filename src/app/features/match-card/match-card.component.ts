@@ -32,7 +32,7 @@ import { CommonModule } from '@angular/common';
               class="w-10 shadow-sm rounded-sm"
               onerror="this.src='https://flagcdn.com/w40/un.png'"
             />
-            <span class="font-bold text-lg truncate w-full" [title]="match().team1.name">
+            <span class="text-lg truncate w-full" [title]="match().team1.name">
               {{ match().team1.name }}
             </span>
           </div>
@@ -66,7 +66,7 @@ import { CommonModule } from '@angular/common';
               class="w-10 shadow-sm rounded-sm"
               onerror="this.src='https://flagcdn.com/w40/un.png'"
             />
-            <span class="font-bold text-lg truncate w-full" [title]="match().team2.name">
+            <span class="text-lg truncate w-full" [title]="match().team2.name">
               {{ match().team2.name }}
             </span>
           </div>

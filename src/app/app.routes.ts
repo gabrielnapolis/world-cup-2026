@@ -15,6 +15,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/group-stage/group-stage.component').then(m => m.GroupStageComponent)
   },
   {
+    path: 'top-scorers',
+    loadComponent: () => import('./features/top-scorers/top-scorers.component').then(m => m.TopScorersComponent)
+  },
+  {
     path: '**',
     redirectTo: 'schedule'
   }
