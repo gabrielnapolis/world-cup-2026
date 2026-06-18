@@ -6,7 +6,7 @@
     <div class="flex flex-wrap justify-center items-center gap-4 w-full mt-2">
 
       <!-- Day Navigator -->
-      <div class="flex items-center gap-2 md:w-48 justify-between bg-surface-900 border border-surface-800 rounded-lg p-1">
+      <div class="flex items-center gap-2 md:w-auto justify-between bg-surface-900 border border-surface-800 rounded-lg p-1">
         <p-button
           icon="pi pi-chevron-left"
           [text]="true"
@@ -15,9 +15,14 @@
           (onClick)="prevDay()">
         </p-button>
 
-        <span class="font-bold text-surface-0 whitespace-nowrap min-w-20 text-center">
-          {{ selectedDateLabel() }}
-        </span>
+        <div
+          class="flex items-center gap-2 cursor-pointer hover:text-primary-400 transition-colors px-3 py-1 rounded"
+          (click)="op.toggle($event)">
+          <span class="font-bold text-surface-0 whitespace-nowrap min-w-20 text-center">
+            {{ selectedDateLabel() }}
+          </span>
+          <i class="pi pi-calendar text-sm text-surface-400"></i>
+        </div>
 
         <p-button
           icon="pi pi-chevron-right"
@@ -27,6 +32,18 @@
           (onClick)="nextDay()">
         </p-button>
       </div>
+
+      <p-popover #op [pt]="{ content: { style: 'padding: 0' } }" styleClass="!p-0">
+        <p-datepicker
+          [inline]="true"
+          [ngModel]="selectedDateObj()"
+          (ngModelChange)="onDateSelect($event, op)"
+          [minDate]="minDate()"
+          [maxDate]="maxDate()"
+          [disabledDates]="disabledDates()"
+          styleClass="border-none">
+        </p-datepicker>
+      </p-popover>
 
       <p-select
         [options]="groups()"

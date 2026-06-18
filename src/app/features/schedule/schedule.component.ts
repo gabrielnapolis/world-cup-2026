@@ -6,11 +6,13 @@ import {MatchCardComponent} from '../match-card/match-card.component';
 import {Select} from 'primeng/select';
 import {Skeleton} from 'primeng/skeleton';
 import {Button} from 'primeng/button';
+import {DatePicker} from 'primeng/datepicker';
+import {Popover} from 'primeng/popover';
 
 @Component({
   selector: 'app-schedule',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatchCardComponent, Select, Skeleton, Button],
+  imports: [CommonModule, FormsModule, MatchCardComponent, Select, Skeleton, Button, DatePicker, Popover],
   templateUrl: './schedule.component.html'
 })
 export class ScheduleComponent implements OnInit {
@@ -63,6 +65,55 @@ export class ScheduleComponent implements OnInit {
     const [year, month, day] = matchDateStr.split('-');
     return `${day}/${month}/${year}`;
   });
+
+  minDate = computed(() => {
+    const dates = this.availableDates();
+    if (!dates.length) return undefined;
+    const [y, m, d] = dates[0].split('-');
+    return new Date(+y, +m - 1, +d);
+  });
+
+  maxDate = computed(() => {
+    const dates = this.availableDates();
+    if (!dates.length) return undefined;
+    const [y, m, d] = dates[dates.length - 1].split('-');
+    return new Date(+y, +m - 1, +d);
+  });
+
+  disabledDates = computed(() => {
+    const datesStr = this.availableDates();
+    if (!datesStr.length) return [];
+
+    const min = this.minDate()!;
+    const max = this.maxDate()!;
+    const disabled: Date[] = [];
+
+    let current = new Date(min);
+    while (current <= max) {
+      const str = this.formatDateStr(current);
+      if (!datesStr.includes(str)) {
+        disabled.push(new Date(current));
+      }
+      current.setDate(current.getDate() + 1);
+    }
+    return disabled;
+  });
+
+  selectedDateObj = computed(() => {
+    const idx = this.selectedDateIndex();
+    const dates = this.availableDates();
+    if (idx === -1 || !dates[idx]) return undefined;
+
+    const [y, m, d] = dates[idx].split('-');
+    return new Date(+y, +m - 1, +d);
+  });
+
+  onDateSelect(date: Date, popover?: Popover) {
+    if (date) {
+      this.selectedDateStr.set(this.formatDateStr(date));
+      //popover.hide();
+    }
+  }
 
   private formatDateStr(d: Date): string {
     const year = d.getFullYear();
