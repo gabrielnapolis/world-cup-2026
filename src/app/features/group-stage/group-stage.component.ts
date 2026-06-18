@@ -13,7 +13,7 @@ import { Match } from '../../core/models/match.model';
   standalone: true,
   imports: [CommonModule, TableModule, Button, Dialog, GroupHistoryCardComponent],
   template: `
-    <div class="flex flex-col gap-6 p-4 max-w-7xl mx-auto">
+    <div class="flex flex-col gap-6 py-8 px-4 max-w-7xl mx-auto">
       <div class="flex justify-center">
         <img src="world-cup-white.png" alt="Copa 2026 Logo" class="w-40 md:w-32" />
       </div>
