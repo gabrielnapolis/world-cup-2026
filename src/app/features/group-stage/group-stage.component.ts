@@ -7,14 +7,15 @@ import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { GroupHistoryCardComponent } from '../group-history-card/group-history-card.component';
 import { Match } from '../../core/models/match.model';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-group-stage',
   standalone: true,
-  imports: [CommonModule, TableModule, Button, Dialog, GroupHistoryCardComponent],
+  imports: [CommonModule, TableModule, Button, Dialog, GroupHistoryCardComponent, RouterLink],
   template: `
     <div class="flex flex-col gap-6 py-8 px-4 max-w-7xl mx-auto">
-      <div class="flex justify-center">
+      <div class="flex justify-center cursor-pointer" routerLink="/">
         <img src="world-cup-white.png" alt="Copa 2026 Logo" class="w-40 md:w-60" />
       </div>
       <div class="flex justify-center">

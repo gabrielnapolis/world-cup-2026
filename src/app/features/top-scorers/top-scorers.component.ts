@@ -4,11 +4,12 @@ import { WorldCupService } from '../../core/services/world-cup.service';
 import { Card } from 'primeng/card';
 import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-top-scorers',
   standalone: true,
-  imports: [CommonModule, Card, Tag, Button],
+  imports: [CommonModule, Card, Tag, Button, RouterLink],
   templateUrl: './top-scorers.component.html'
 })
 export class TopScorersComponent {
@@ -16,7 +17,7 @@ export class TopScorersComponent {
   topScorers = this.worldCupService.topScorers;
 
   limit = signal(4);
-  
+
   visibleScorers = computed(() => {
     return this.topScorers().slice(0, this.limit());
   });

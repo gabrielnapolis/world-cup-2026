@@ -8,11 +8,12 @@ import {Skeleton} from 'primeng/skeleton';
 import {Button} from 'primeng/button';
 import {DatePicker} from 'primeng/datepicker';
 import {Popover} from 'primeng/popover';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-schedule',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatchCardComponent, Select, Skeleton, Button, DatePicker, Popover],
+  imports: [CommonModule, FormsModule, MatchCardComponent, Select, Skeleton, Button, DatePicker, Popover, RouterLink],
   templateUrl: './schedule.component.html'
 })
 export class ScheduleComponent implements OnInit {
@@ -180,8 +181,10 @@ export class ScheduleComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    if (this.matches().length === 0) {
+    this.worldCupService.loadMatches();
+
+    setInterval(() => {
       this.worldCupService.loadMatches();
-    }
+    }, 10 * 60 * 1000);
   }
 }
