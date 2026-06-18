@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, Card, Tag, Divider, Dialog, Button],
   template: `
-    <p-card [styleClass]="match().status === 'Passando Agora' ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : 'h-full'">
+    <p-card [styleClass]="match().status === 'Passando Agora' ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : match().status === 'Em Breve' ? 'h-full border-2 border-yellow-500/80 shadow-[0_0_15px_rgba(234,179,8,0.15)] relative overflow-hidden transition-all' : 'h-full'">
       <ng-template #header>
         <div class="flex justify-between items-center p-4 pb-0">
           <span class="text-sm text-surface-400 font-semibold">{{ match().stage }}</span>
@@ -21,6 +21,10 @@ import { CommonModule } from '@angular/common';
               <span class="relative flex h-2.5 w-2.5">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+              </span>
+            } @else if (match().status === 'Em Breve') {
+              <span class="relative flex h-2.5 w-2.5">
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500"></span>
               </span>
             }
             <p-tag [severity]="statusSeverity()" [value]="match().status"></p-tag>
@@ -156,6 +160,7 @@ export class MatchCardComponent {
   statusSeverity = computed(() => {
     switch (this.match().status) {
       case 'Passando Agora': return 'success';
+      case 'Em Breve': return 'warn';
       case 'Hoje': return 'success';
       case 'Amanhã': return 'info';
       case 'Encerrado': return 'secondary';

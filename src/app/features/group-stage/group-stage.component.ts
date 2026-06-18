@@ -30,7 +30,7 @@ import { Match } from '../../core/models/match.model';
             <div class="bg-surface-900 rounded-xl overflow-hidden border border-surface-800">
               <div class="bg-surface-800 px-4 py-3 font-bold text-lg text-primary-400 flex justify-between items-center">
                 <span>{{ group.groupName }}</span>
-                <p-button severity="help" icon="pi pi-eye" label="Histórico" [text]="true" size="small" (onClick)="showHistory(group.groupName)"></p-button>
+                <p-button severity="info" icon="pi pi-eye" label="Jogos" [text]="true" size="small" (onClick)="showHistory(group.groupName)"></p-button>
               </div>
               <p-table [value]="group.results" [tableStyle]="{ 'min-width': '100%' }" size="small">
                 <ng-template pTemplate="header">

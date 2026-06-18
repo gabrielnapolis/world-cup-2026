@@ -115,9 +115,15 @@ export class ScheduleComponent implements OnInit {
       filtered = filtered.filter(m => m.group === this.selectedGroup());
     }
     filtered.sort((a, b) => {
+      if (a.status === 'Passando Agora' && b.status !== 'Passando Agora') return -1;
+      if (b.status === 'Passando Agora' && a.status !== 'Passando Agora') return 1;
+
+      if (a.status === 'Em Breve' && b.status !== 'Em Breve') return -1;
+      if (b.status === 'Em Breve' && a.status !== 'Em Breve') return 1;
+
       const dateA = new Date(a.localDate).getTime();
       const dateB = new Date(b.localDate).getTime();
-      return dateB - dateA;
+      return dateA - dateB;
     });
     return filtered;
   });

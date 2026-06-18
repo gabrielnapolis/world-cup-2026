@@ -272,7 +272,7 @@ export class WorldCupService {
   private calculateStatus(
     localDate: Date,
     score?: { ft: [number, number] },
-  ): 'Passando Agora' | 'Hoje' | 'Amanhã' | 'Encerrado' | 'Futuro' {
+  ): 'Passando Agora' | 'Em Breve' | 'Hoje' | 'Amanhã' | 'Encerrado' | 'Futuro' {
     if (score && score.ft && score.ft.length === 2) {
       return 'Encerrado';
     }
@@ -287,6 +287,11 @@ export class WorldCupService {
 
     if (now >= localDate && now <= matchEndTime) {
       return 'Passando Agora';
+    }
+
+    const timeUntilMatch = localDate.getTime() - now.getTime();
+    if (timeUntilMatch > 0 && timeUntilMatch <= 90 * 60000) {
+      return 'Em Breve';
     }
 
     if (matchDateStr === todayStr) {
