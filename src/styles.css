@@ -11,3 +11,10 @@ body {
     background-color: var(--p-surface-950, #000);
     color: var(--p-surface-0, #fff);
 }
+
+.p-dialog-mask.p-component-overlay,
+.p-overlay-mask {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+}
