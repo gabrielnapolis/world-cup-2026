@@ -1,4 +1,116 @@
-<div class="p-4">
-  <h2 class="text-2xl font-bold mb-4">Classificação</h2>
-  <p class="text-surface-400">Página em construção...</p>
+<div class="p-4 md:p-8 w-full h-full">
+  <div class="flex flex-col items-center gap-4 mb-4 cursor-pointer" routerLink="/">
+    <img src="world-cup-white.png" alt="Copa 2026 Logo" class="w-40 md:w-60"/>
+    <h1 class="text-xl font-bold tracking-tight text-surface-0 flex items-center gap-3">
+      Chave do mata-mata
+    </h1>
+    <p class="text-surface-400">Projeção com base na <b>pontuação atual</b> da fase de grupos. Os valores exibidos ainda podem ser alterados.</p>
+  </div>
+
+  <div class="relative bg-surface-900 border border-surface-800 rounded-xl overflow-hidden">
+
+    <p-button
+      icon="pi pi-chevron-left"
+      [rounded]="true"
+      severity="secondary"
+      class="md:hidden absolute left-2 top-1/2 -translate-y-1/2 z-10 shadow-lg"
+      (onClick)="scrollBracket('left')">
+    </p-button>
+
+    <p-button
+      icon="pi pi-chevron-right"
+      [rounded]="true"
+      severity="secondary"
+      class="md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 shadow-lg"
+      (onClick)="scrollBracket('right')">
+    </p-button>
+
+    <div #scrollContainer class="bracket-wrapper w-full overflow-x-auto overflow-y-auto p-4 scroll-smooth">
+      <div class="bracket-container">
+
+        <div class="bracket-col">
+          <div class="bracket-header">Segunda Fase</div>
+          <div class="bracket-matches">
+            @for (m of leftR32(); track m.num) {
+              <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>
+            }
+          </div>
+        </div>
+        <div class="bracket-col">
+          <div class="bracket-header">Oitavas de Final</div>
+          <div class="bracket-matches">
+            @for (m of leftR16(); track m.num) {
+              <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>
+            }
+          </div>
+        </div>
+        <div class="bracket-col">
+          <div class="bracket-header">Quartas de Final</div>
+          <div class="bracket-matches">
+            @for (m of leftQF(); track m.num) {
+              <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>
+            }
+          </div>
+        </div>
+        <div class="bracket-col">
+          <div class="bracket-header">Semifinal</div>
+          <div class="bracket-matches">
+            @for (m of leftSF(); track m.num) {
+              <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>
+            }
+          </div>
+        </div>
+
+        <div class="bracket-col center-col">
+          <div class="bracket-header text-primary-400 font-bold">Final</div>
+          <div class="bracket-matches center-matches">
+            @for (m of finalMatch(); track m.num) {
+              <app-bracket-match-card [match]="m" class="bracket-node highlight"></app-bracket-match-card>
+            }
+          </div>
+
+          <div class="bracket-header mt-8">Decisão do 3º Lugar</div>
+          <div class="bracket-matches center-matches">
+            @for (m of thirdPlaceMatch(); track m.num) {
+              <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>
+            }
+          </div>
+        </div>
+
+        <div class="bracket-col">
+          <div class="bracket-header">Semifinal</div>
+          <div class="bracket-matches">
+            @for (m of rightSF(); track m.num) {
+              <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>
+            }
+          </div>
+        </div>
+        <div class="bracket-col">
+          <div class="bracket-header">Quartas de Final</div>
+          <div class="bracket-matches">
+            @for (m of rightQF(); track m.num) {
+              <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>
+            }
+          </div>
+        </div>
+        <div class="bracket-col">
+          <div class="bracket-header">Oitavas de Final</div>
+          <div class="bracket-matches">
+            @for (m of rightR16(); track m.num) {
+              <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>
+            }
+          </div>
+        </div>
+        <div class="bracket-col">
+          <div class="bracket-header">Segunda Fase</div>
+          <div class="bracket-matches">
+            @for (m of rightR32(); track m.num) {
+              <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>
+            }
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>

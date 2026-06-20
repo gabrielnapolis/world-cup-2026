@@ -19,7 +19,7 @@ import {RouterLink} from '@angular/router';
         <img src="world-cup-white.png" alt="Copa 2026 Logo" class="w-40 md:w-60" />
       </div>
       <div class="flex justify-center">
-        <h1 class="text-xl font-bold m-0">Classificação da Fase de Grupos</h1>
+        <h1 class="text-xl font-bold m-0">Fase de Grupos</h1>
       </div>
 
 
@@ -48,7 +48,7 @@ import {RouterLink} from '@angular/router';
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-result let-i="rowIndex">
-                  <tr [ngClass]="{'bg-green-900/20': i < 2}"> <!-- Destacar classificados (top 2) -->
+                  <tr [ngClass]="{'bg-green-900/20': i < 2}">
                     <td class="flex items-center gap-2">
                       <img
                         [src]="'https://flagcdn.com/w20/' + result.team.code + '.png'"

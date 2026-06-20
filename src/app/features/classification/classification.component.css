@@ -1,0 +1,57 @@
+.bracket-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  padding: 1rem;
+  scrollbar-width: thin;
+}
+
+.bracket-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  min-width: max-content;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.bracket-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+}
+
+.center-col {
+  min-width: 240px;
+  justify-content: center;
+}
+
+.bracket-header {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--surface-400);
+  margin-bottom: 2rem;
+}
+
+.bracket-matches {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-grow: 1;
+  gap: 1.5rem;
+}
+
+.center-matches {
+  flex-grow: 0;
+}
+
+.bracket-node {
+  display: block;
+  width: 100%;
+}
+
+/* Opcional: Adicionar pseudo elementos para criar as linhas conectando os cards */
+/* Por enquanto o layout via flexbox 'space-around' alinha os cards perfeitamente. */

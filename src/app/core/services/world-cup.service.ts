@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Match, TopScorer } from '../models/match.model';
+import { Match, TopScorer, GroupResult, Team } from '../models/match.model';
 
 const TRANSLATIONS: Record<string, string> = {
   Brazil: 'Brasil',
@@ -116,6 +116,134 @@ export class WorldCupService {
     );
   });
 
+  groupStandings = computed<Map<string, GroupResult[]>>(() => {
+    const standings = new Map<string, GroupResult[]>();
+
+    const groups = ['Grupo A', 'Grupo B', 'Grupo C', 'Grupo D', 'Grupo E', 'Grupo F', 'Grupo G', 'Grupo H', 'Grupo I', 'Grupo J', 'Grupo K', 'Grupo L'];
+    groups.forEach(g => standings.set(g, []));
+
+    const teamMap = new Map<string, GroupResult>();
+
+    this.matches().forEach(m => {
+      if (!m.group) return;
+
+      [m.team1, m.team2].forEach(team => {
+        if (!teamMap.has(team.name) && team.name && !team.name.match(/^[1-3][A-L]/)) {
+           teamMap.set(team.name, {
+             team, played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, goalDifference: 0, points: 0
+           });
+        }
+      });
+
+      if (m.score && m.score.ft) {
+        const [g1, g2] = m.score.ft;
+        const t1 = teamMap.get(m.team1.name);
+        const t2 = teamMap.get(m.team2.name);
+        if (t1 && t2) {
+          t1.played++;
+          t2.played++;
+          t1.goalsFor += g1;
+          t1.goalsAgainst += g2;
+          t2.goalsFor += g2;
+          t2.goalsAgainst += g1;
+          t1.goalDifference = t1.goalsFor - t1.goalsAgainst;
+          t2.goalDifference = t2.goalsFor - t2.goalsAgainst;
+
+          if (g1 > g2) { t1.won++; t1.points += 3; t2.lost++; }
+          else if (g1 < g2) { t2.won++; t2.points += 3; t1.lost++; }
+          else { t1.drawn++; t2.drawn++; t1.points += 1; t2.points += 1; }
+        }
+      }
+    });
+
+    teamMap.forEach((res, teamName) => {
+      const teamMatch = this.matches().find(m => m.group && (m.team1.name === teamName || m.team2.name === teamName));
+      if (teamMatch && teamMatch.group) {
+        const groupStandingsArr = standings.get(teamMatch.group);
+        if (groupStandingsArr) {
+          groupStandingsArr.push(res);
+        }
+      }
+    });
+
+    standings.forEach(arr => {
+      arr.sort((a, b) => b.points - a.points || b.goalDifference - a.goalDifference || b.goalsFor - a.goalsFor);
+    });
+
+    return standings;
+  });
+
+  projectedBracket = computed<Match[]>(() => {
+    const matches = this.matches();
+    const standings = this.groupStandings();
+
+    const placements = new Map<string, Team>();
+    const thirdPlaces: { groupLetter: string, result: GroupResult }[] = [];
+
+    standings.forEach((results, groupName) => {
+      const letter = groupName.replace('Grupo ', '');
+      if (results.length > 0) placements.set(`1${letter}`, results[0].team);
+      if (results.length > 1) placements.set(`2${letter}`, results[1].team);
+      if (results.length > 2) thirdPlaces.push({ groupLetter: letter, result: results[2] });
+    });
+
+    thirdPlaces.sort((a, b) => b.result.points - a.result.points || b.result.goalDifference - a.result.goalDifference || b.result.goalsFor - a.result.goalsFor);
+    const best8Thirds = thirdPlaces.slice(0, 8);
+
+    let availableThirds = [...best8Thirds];
+    const projected = matches.map(m => ({ ...m, team1: { ...m.team1 }, team2: { ...m.team2 } }));
+
+    projected.forEach(m => {
+       if (m.stage === 'Round of 32' || m.stage === 'Segunda Fase') {
+          if (m.team1.name.match(/^[1-2][A-L]$/)) {
+            const resolved = placements.get(m.team1.name);
+            if (resolved) m.team1 = resolved;
+          } else if (m.team1.name.startsWith('3')) {
+            const possibleGroups = m.team1.name.replace('3', '').split('/');
+            const foundIdx = availableThirds.findIndex(t => possibleGroups.some(pg => t.groupLetter === pg));
+            if (foundIdx !== -1) {
+              m.team1 = availableThirds[foundIdx].result.team;
+              availableThirds.splice(foundIdx, 1);
+            }
+          }
+
+          if (m.team2.name.match(/^[1-2][A-L]$/)) {
+            const resolved = placements.get(m.team2.name);
+            if (resolved) m.team2 = resolved;
+          } else if (m.team2.name.startsWith('3')) {
+            const possibleGroups = m.team2.name.replace('3', '').split('/');
+            const foundIdx = availableThirds.findIndex(t => possibleGroups.some(pg => t.groupLetter === pg));
+            if (foundIdx !== -1) {
+              m.team2 = availableThirds[foundIdx].result.team;
+              availableThirds.splice(foundIdx, 1);
+            }
+          }
+       }
+    });
+
+    const matchMap = new Map<number, Match>();
+    projected.forEach(m => matchMap.set(m.num, m));
+
+    projected.forEach(m => {
+       if (m.team1.name.startsWith('W')) {
+          const matchNum = parseInt(m.team1.name.replace(/\D/g, ''));
+          const prevMatch = matchMap.get(matchNum);
+          if (prevMatch && prevMatch.score && prevMatch.score.ft) {
+             m.team1 = prevMatch.score.ft[0] > prevMatch.score.ft[1] ? prevMatch.team1 : prevMatch.team2;
+          }
+       }
+       if (m.team2.name.startsWith('W')) {
+          const matchNum = parseInt(m.team2.name.replace(/\D/g, ''));
+          const prevMatch = matchMap.get(matchNum);
+          if (prevMatch && prevMatch.score && prevMatch.score.ft) {
+             m.team2 = prevMatch.score.ft[0] > prevMatch.score.ft[1] ? prevMatch.team1 : prevMatch.team2;
+          }
+       }
+    });
+
+    return projected;
+  });
+
   private countryToIsoMap: Record<string, string> = {
     Argentina: 'ar',
     Brazil: 'br',
@@ -184,8 +312,6 @@ export class WorldCupService {
     'Curaçao': 'cw',
     Austria: 'at',
   };
-
-  constructor() {}
 
   loadMatches() {
     this.loading.set(true);
