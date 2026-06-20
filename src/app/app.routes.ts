@@ -19,6 +19,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/top-scorers/top-scorers.component').then(m => m.TopScorersComponent)
   },
   {
+    path: 'classification',
+    loadComponent: () => import('./features/classification/classification.component').then(m => m.ClassificationComponent)
+  },
+  {
     path: '**',
     redirectTo: 'schedule'
   }
