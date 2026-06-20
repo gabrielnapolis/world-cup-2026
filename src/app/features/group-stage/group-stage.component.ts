@@ -7,19 +7,25 @@ import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { GroupHistoryCardComponent } from '../group-history-card/group-history-card.component';
 import { Match } from '../../core/models/match.model';
-import {RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { SearchInputComponent } from '../../shared/components/search-input/search-input.component';
 
 @Component({
   selector: 'app-group-stage',
   standalone: true,
-  imports: [CommonModule, TableModule, Button, Dialog, GroupHistoryCardComponent, RouterLink],
+  imports: [CommonModule, TableModule, Button, Dialog, GroupHistoryCardComponent, RouterLink, SearchInputComponent],
   template: `
     <div class="flex flex-col gap-6 py-8 px-4 max-w-7xl mx-auto">
       <div class="flex justify-center cursor-pointer" routerLink="/">
         <img src="world-cup-white.png" alt="Copa 2026 Logo" class="w-40 md:w-60" />
       </div>
-      <div class="flex justify-center">
-        <h1 class="text-xl font-bold m-0">Fase de Grupos</h1>
+      <div class="flex flex-col items-center gap-4">
+        <h1 class="text-2xl font-bold m-0">Fase de Grupos</h1>
+        <app-search-input
+          [(value)]="searchTerm"
+          placeholder="Buscar seleção"
+          styleClass="w-full max-w-sm">
+        </app-search-input>
       </div>
 
 
@@ -95,7 +101,7 @@ import {RouterLink} from '@angular/router';
           </div>
         </div>
 
-        <p-dialog [header]="'Histórico de Jogos - ' + selectedGroup()" [(visible)]="historyDialogVisible" [modal]="true" [style]="{ width: '90vw', maxWidth: '600px' }" [contentStyle]="{ padding: '0' }" [dismissableMask]="true">
+        <p-dialog [header]="'Jogos - ' + selectedGroup()" [(visible)]="historyDialogVisible" [modal]="true" [style]="{ width: '90vw', maxWidth: '600px' }" [contentStyle]="{ padding: '0' }" [dismissableMask]="true">
           <div class="flex flex-col">
             @for (match of selectedGroupMatches(); track match.num) {
               <app-group-history-card [match]="match" class="border-b border-surface-800 last:border-b-0"></app-group-history-card>
@@ -196,14 +202,29 @@ export class GroupStageComponent implements OnInit {
     return finalStandings;
   });
 
+  searchTerm = signal<string>('');
+
+  filteredStandings = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase();
+    const standings = this.groupStandings();
+
+    if (!term) return standings;
+
+    return standings.filter(group =>
+      group.results.some(result =>
+        result.team.name.toLowerCase().includes(term)
+      )
+    );
+  });
+
   limit = signal<number>(4);
 
   visibleGroups = computed(() => {
-    return this.groupStandings().slice(0, this.limit());
+    return this.filteredStandings().slice(0, this.limit());
   });
 
   hasMoreGroups = computed(() => {
-    return this.groupStandings().length > this.limit();
+    return this.filteredStandings().length > this.limit();
   });
 
   loadMore() {
