@@ -6,11 +6,12 @@ import { Divider } from 'primeng/divider';
 import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-match-card',
   standalone: true,
-  imports: [CommonModule, Card, Tag, Divider, Dialog, Button],
+  imports: [CommonModule, Card, Tag, Divider, Dialog, Button, RouterLink],
   templateUrl: 'match-card.component.html',
   styles: [`
     :host {
@@ -22,6 +23,8 @@ export class MatchCardComponent {
   match = input.required<Match>();
 
   goalsDialogVisible = false;
+
+  CAZE_TV = 'www.youtube.com/@CazeTV/streams';
 
   statusSeverity = computed(() => {
     switch (this.match().status) {
@@ -36,5 +39,9 @@ export class MatchCardComponent {
 
   showGoals() {
     this.goalsDialogVisible = true;
+  }
+
+  openLink():void {
+    window.open(`https://${this.CAZE_TV}`, '_blank');
   }
 }
