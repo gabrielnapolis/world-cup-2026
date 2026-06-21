@@ -11,7 +11,7 @@
   flex-direction: row;
   justify-content: space-between;
   min-width: max-content;
-  gap: 2rem;
+  gap: 1rem;
   padding: 1rem;
 }
 
@@ -29,10 +29,10 @@
 .bracket-header {
   text-align: center;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--surface-400);
+  color: rgb(100, 116, 139);
   margin-bottom: 2rem;
 }
 
@@ -52,6 +52,3 @@
   display: block;
   width: 100%;
 }
-
-/* Opcional: Adicionar pseudo elementos para criar as linhas conectando os cards */
-/* Por enquanto o layout via flexbox 'space-around' alinha os cards perfeitamente. */

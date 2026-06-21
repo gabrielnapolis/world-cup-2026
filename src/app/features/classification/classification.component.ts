@@ -3,12 +3,13 @@ import {CommonModule} from '@angular/common';
 import {WorldCupService} from '../../core/services/world-cup.service';
 import {BracketMatchCardComponent} from './bracket-match-card.component';
 import {Button} from 'primeng/button';
+import {Message} from 'primeng/message';
 import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-classification',
   standalone: true,
-  imports: [CommonModule, BracketMatchCardComponent, Button, RouterLink],
+  imports: [CommonModule, BracketMatchCardComponent, Button, Message, RouterLink],
   templateUrl: './classification.component.html',
   styleUrls: ['./classification.component.css']
 })
