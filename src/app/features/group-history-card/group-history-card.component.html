@@ -1,0 +1,63 @@
+<p-card
+  [styleClass]="match().status === 'Passando Agora' ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : 'h-full border-none sm:border-solid !shadow-none sm:!shadow-sm'">
+  <ng-template #header>
+    <div class="flex justify-end items-center p-4 pb-0">
+      <div class="flex items-center gap-2">
+        @if (match().status === 'Passando Agora') {
+          <span class="relative flex h-2.5 w-2.5">
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+              </span>
+        }
+        <p-tag [severity]="statusSeverity()" [value]="match().status"></p-tag>
+      </div>
+    </div>
+  </ng-template>
+
+  <div class="flex justify-between items-center pb-2">
+    <div class="flex flex-col items-center gap-2 w-[40%] text-center">
+      <img
+        [src]="'https://flagcdn.com/w40/' + match().team1.code + '.png'"
+        [alt]="match().team1.name + ' flag'"
+        class="w-10 shadow-sm rounded-sm"
+        onerror="this.src='https://flagcdn.com/w40/un.png'"
+      />
+      <span class="text-lg truncate w-full" [title]="match().team1.name">
+            {{ match().team1.name }}
+          </span>
+    </div>
+
+    <div class="flex flex-col items-center justify-center w-[20%]">
+      @if (match().score?.ft) {
+        <div class="flex flex-col items-center gap-1">
+          <div class="text-lg bg-surface-800 px-3 py-1 rounded-md">
+            {{ match().score!.ft[0] }} - {{ match().score!.ft[1] }}
+          </div>
+          <div class="text-xs text-surface-400">
+            {{ match().localDate | date:'dd/MM' }}
+          </div>
+        </div>
+      } @else {
+        <div class="text-xl text-primary-400">
+          {{ match().localDate | date:'HH:mm':'UTC-0300' }}
+        </div>
+        <div class="text-xs text-surface-400">
+          {{ match().localDate | date:'dd/MM' }}
+        </div>
+      }
+    </div>
+
+    <div class="flex flex-col items-center gap-2 w-[40%] text-center">
+      <img
+        [src]="'https://flagcdn.com/w40/' + match().team2.code + '.png'"
+        [alt]="match().team2.name + ' flag'"
+        class="w-10 shadow-sm rounded-sm"
+        onerror="this.src='https://flagcdn.com/w40/un.png'"
+      />
+      <span class="text-lg truncate w-full" [title]="match().team2.name">
+            {{ match().team2.name }}
+          </span>
+    </div>
+  </div>
+</p-card>

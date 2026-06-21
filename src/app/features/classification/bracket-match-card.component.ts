@@ -2,7 +2,6 @@ import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {Match} from '../../core/models/match.model';
 
-
 @Component({
   selector: 'app-bracket-match-card',
   standalone: true,
