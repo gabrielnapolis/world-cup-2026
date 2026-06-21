@@ -27,4 +27,9 @@ export class GroupHistoryCardComponent {
       default: return 'contrast';
     }
   });
+
+  shortDayOfWeek = computed(() => {
+    const days = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+    return days[this.match().localDate.getDay()];
+  });
 }

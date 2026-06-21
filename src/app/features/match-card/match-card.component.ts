@@ -6,12 +6,11 @@ import { Divider } from 'primeng/divider';
 import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-match-card',
   standalone: true,
-  imports: [CommonModule, Card, Tag, Divider, Dialog, Button, RouterLink],
+  imports: [CommonModule, Card, Tag, Divider, Dialog, Button],
   templateUrl: 'match-card.component.html',
   styles: [`
     :host {

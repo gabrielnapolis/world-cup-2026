@@ -1,5 +1,5 @@
 <p-card
-  [styleClass]="match().status === 'Passando Agora' ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : 'h-full border-none sm:border-solid !shadow-none sm:!shadow-sm'">
+  [class]="match().status === 'Passando Agora' ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : 'h-full border-none sm:border-solid !shadow-none sm:!shadow-sm'">
   <ng-template #header>
     <div class="flex justify-end items-center p-4 pb-0">
       <div class="flex items-center gap-2">
@@ -37,6 +37,9 @@
           <div class="text-xs text-surface-400">
             {{ match().localDate | date:'dd/MM' }}
           </div>
+          <div class="text-[10px] text-surface-500 font-bold">
+            {{ shortDayOfWeek() }}
+          </div>
         </div>
       } @else {
         <div class="text-xl text-primary-400">
@@ -44,6 +47,9 @@
         </div>
         <div class="text-xs text-surface-400">
           {{ match().localDate | date:'dd/MM' }}
+        </div>
+        <div class="text-[10px] text-surface-500 font-bold">
+          {{ shortDayOfWeek() }}
         </div>
       }
     </div>
