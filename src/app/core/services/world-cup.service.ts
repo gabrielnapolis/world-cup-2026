@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Match, TopScorer, GroupResult, Team } from '../models/match.model';
+import { Match, TopScorer, GroupResult, Team, MatchStatus, MatchStatusType } from '../models/match.model';
 
 const TRANSLATIONS: Record<string, string> = {
   Brazil: 'Brasil',
@@ -398,9 +398,9 @@ export class WorldCupService {
   private calculateStatus(
     localDate: Date,
     score?: { ft: [number, number] },
-  ): 'Passando Agora' | 'Em Breve' | 'Hoje' | 'Amanhã' | 'Encerrado' | 'Futuro' {
+  ): MatchStatusType {
     if (score && score.ft && score.ft.length === 2) {
-      return 'Encerrado';
+      return MatchStatus.FINISHED;
     }
 
     const now = new Date();
@@ -412,27 +412,27 @@ export class WorldCupService {
     const matchEndTime = new Date(localDate.getTime() + 120 * 60000);
 
     if (now >= localDate && now <= matchEndTime) {
-      return 'Passando Agora';
+      return MatchStatus.LIVE;
     }
 
     const timeUntilMatch = localDate.getTime() - now.getTime();
     if (timeUntilMatch > 0 && timeUntilMatch <= 90 * 60000) {
-      return 'Em Breve';
+      return MatchStatus.SOON;
     }
 
     if (matchDateStr === todayStr) {
       // It could also be Encerrado if time passed, but we'll rely on score for that,
       // or if you want to consider time:
       if (now > matchEndTime) {
-        return 'Encerrado'; // assuming a match takes ~2 hours
+        return MatchStatus.FINISHED; // assuming a match takes ~2 hours
       }
-      return 'Hoje';
+      return MatchStatus.TODAY;
     } else if (matchDateStr === tomorrowStr) {
-      return 'Amanhã';
+      return MatchStatus.TOMORROW;
     } else if (localDate.getTime() < now.getTime()) {
-      return 'Encerrado';
+      return MatchStatus.FINISHED;
     }
 
-    return 'Futuro';
+    return MatchStatus.FUTURE;
   }
 }

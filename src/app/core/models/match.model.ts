@@ -1,3 +1,14 @@
+export const MatchStatus = {
+  LIVE: 'Passando Agora',
+  SOON: 'Em Breve',
+  TODAY: 'Hoje',
+  TOMORROW: 'Amanhã',
+  FINISHED: 'Encerrado',
+  FUTURE: 'Futuro'
+} as const;
+
+export type MatchStatusType = typeof MatchStatus[keyof typeof MatchStatus];
+
 export interface Team {
   name: string;
   code: string;  // e.g., "BR", "AR", "DE" (ISO alpha-2 for flagcdn)
@@ -28,7 +39,7 @@ export interface Match {
 
   // Custom properties added for app logic
   localDate: Date;
-  status: 'Passando Agora' | 'Em Breve' | 'Hoje' | 'Amanhã' | 'Encerrado' | 'Futuro';
+  status: MatchStatusType;
 }
 
 export interface GroupResult {

@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { Match } from '../../core/models/match.model';
+import { Match, MatchStatus } from '../../core/models/match.model';
 import { Card } from 'primeng/card';
 import { Tag } from 'primeng/tag';
 import { Divider } from 'primeng/divider';
@@ -25,13 +25,15 @@ export class MatchCardComponent {
 
   CAZE_TV = 'www.youtube.com/@CazeTV/streams';
 
+  MatchStatus = MatchStatus;
+
   statusSeverity = computed(() => {
     switch (this.match().status) {
-      case 'Passando Agora': return 'success';
-      case 'Em Breve': return 'warn';
-      case 'Hoje': return 'success';
-      case 'Amanhã': return 'info';
-      case 'Encerrado': return 'secondary';
+      case MatchStatus.LIVE: return 'success';
+      case MatchStatus.SOON: return 'warn';
+      case MatchStatus.TODAY: return 'success';
+      case MatchStatus.TOMORROW: return 'info';
+      case MatchStatus.FINISHED: return 'secondary';
       default: return 'contrast';
     }
   });

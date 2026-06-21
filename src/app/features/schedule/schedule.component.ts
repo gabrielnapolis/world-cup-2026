@@ -9,6 +9,7 @@ import {Button} from 'primeng/button';
 import {DatePicker} from 'primeng/datepicker';
 import {Popover} from 'primeng/popover';
 import {RouterLink} from '@angular/router';
+import { MatchStatus } from '../../core/models/match.model';
 
 @Component({
   selector: 'app-schedule',
@@ -18,12 +19,14 @@ import {RouterLink} from '@angular/router';
 })
 export class ScheduleComponent implements OnInit {
   private worldCupService = inject(WorldCupService);
+  private all = 'Todos';
+
   matches = this.worldCupService.matches;
   loading = this.worldCupService.loading;
 
   selectedDateStr = signal<string>('');
-  selectedStage = signal('Todos');
-  selectedGroup = signal('Todos');
+  selectedStage = signal(this.all);
+  selectedGroup = signal(this.all);
 
   availableDates = computed(() => {
     const allMatches = this.matches();
@@ -60,9 +63,10 @@ export class ScheduleComponent implements OnInit {
     const now = new Date();
     const todayStr = this.formatDateStr(now);
     const tomorrowStr = this.formatDateStr(new Date(now.getTime() + 86400000));
-    if (matchDateStr === todayStr) return 'Hoje';
-    if (matchDateStr === tomorrowStr) return 'Amanhã';
-    // Parse YYYY-MM-DD to DD/MM/YYYY
+
+    if (matchDateStr === todayStr) return MatchStatus.TODAY;
+    if (matchDateStr === tomorrowStr) return MatchStatus.TOMORROW;
+
     const [year, month, day] = matchDateStr.split('-');
     return `${day}/${month}/${year}`;
   });
@@ -112,7 +116,7 @@ export class ScheduleComponent implements OnInit {
   onDateSelect(date: Date, popover?: Popover) {
     if (date) {
       this.selectedDateStr.set(this.formatDateStr(date));
-      //popover.hide();
+      popover?.hide();
     }
   }
 
@@ -123,7 +127,6 @@ export class ScheduleComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  // Navigation methods
   prevDay() {
     const idx = this.selectedDateIndex();
     if (idx > 0) {
@@ -139,16 +142,10 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  stages = computed(() => {
-    const allMatches = this.matches();
-    const stageSet = new Set(allMatches.map(m => m.stage));
-    return ['Todos', ...Array.from(stageSet).filter(s => !s.startsWith('Group'))];
-  });
-
   groups = computed(() => {
     const allMatches = this.matches();
     const groupSet = new Set(allMatches.map(m => m.group).filter(Boolean));
-    return ['Todos', ...Array.from(groupSet).sort()];
+    return [this.all, ...Array.from(groupSet).sort()];
   });
 
   filteredMatches = computed(() => {
@@ -160,18 +157,18 @@ export class ScheduleComponent implements OnInit {
       const selectedDate = dates[idx];
       filtered = filtered.filter(m => this.formatDateStr(m.localDate) === selectedDate);
     }
-    if (this.selectedStage() !== 'Todos') {
+    if (this.selectedStage() !== this.all) {
       filtered = filtered.filter(m => m.stage === this.selectedStage());
     }
-    if (this.selectedGroup() !== 'Todos') {
+    if (this.selectedGroup() !== this.all) {
       filtered = filtered.filter(m => m.group === this.selectedGroup());
     }
     filtered.sort((a, b) => {
-      if (a.status === 'Passando Agora' && b.status !== 'Passando Agora') return -1;
-      if (b.status === 'Passando Agora' && a.status !== 'Passando Agora') return 1;
+      if (a.status === MatchStatus.LIVE && b.status !== MatchStatus.LIVE) return -1;
+      if (b.status === MatchStatus.LIVE && a.status !== MatchStatus.LIVE) return 1;
 
-      if (a.status === 'Em Breve' && b.status !== 'Em Breve') return -1;
-      if (b.status === 'Em Breve' && a.status !== 'Em Breve') return 1;
+      if (a.status === MatchStatus.SOON && b.status !== MatchStatus.SOON) return -1;
+      if (b.status === MatchStatus.SOON && a.status !== MatchStatus.SOON) return 1;
 
       const dateA = new Date(a.localDate).getTime();
       const dateB = new Date(b.localDate).getTime();

@@ -1,16 +1,16 @@
 <p-card
-  [styleClass]="match().status === 'Passando Agora' ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : match().status === 'Em Breve' ? 'h-full border-2 border-yellow-500/80 shadow-[0_0_15px_rgba(234,179,8,0.15)] relative overflow-hidden transition-all' : 'h-full'">
+  [class]="match().status === MatchStatus.LIVE ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : match().status === MatchStatus.SOON ? 'h-full border-2 border-yellow-500/80 shadow-[0_0_15px_rgba(234,179,8,0.15)] relative overflow-hidden transition-all' : 'h-full'">
   <ng-template #header>
     <div class="flex justify-between items-center p-4 pb-0">
       <span class="text-sm text-surface-400 font-semibold">{{ match().stage }}</span>
       <div class="flex items-center gap-2">
-        @if (match().status === 'Passando Agora') {
+        @if (match().status === MatchStatus.LIVE) {
           <span class="relative flex h-2.5 w-2.5">
                 <span
                   class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
               </span>
-        } @else if (match().status === 'Em Breve') {
+        } @else if (match().status === MatchStatus.SOON) {
           <span class="relative flex h-2.5 w-2.5">
                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500"></span>
               </span>
@@ -28,7 +28,6 @@
           [src]="'https://flagcdn.com/w40/' + match().team1.code + '.png'"
           [alt]="match().team1.name + ' flag'"
           class="w-10 shadow-sm rounded-sm"
-          onerror="this.src='https://flagcdn.com/w40/un.png'"
         />
         <span class="text-lg truncate w-full" [title]="match().team1.name">
               {{ match().team1.name }}
@@ -60,7 +59,6 @@
           [src]="'https://flagcdn.com/w40/' + match().team2.code + '.png'"
           [alt]="match().team2.name + ' flag'"
           class="w-10 shadow-sm rounded-sm"
-          onerror="this.src='https://flagcdn.com/w40/un.png'"
         />
         <span class="text-lg truncate w-full" [title]="match().team2.name">
               {{ match().team2.name }}
@@ -76,23 +74,29 @@
         <span>{{ match().stadium.city }}</span>
       </div>
 
-      @if (match().status === 'Encerrado' && match().score?.ft) {
+      @if (match().status === MatchStatus.FINISHED && match().score?.ft) {
         <p-button icon="pi pi-eye" label="Gols" severity="info" [text]="true" size="small"
-                  styleClass="flex items-center gap-2 p-0" (onClick)="showGoals()">
+                  class="flex items-center gap-2 p-0" (onClick)="showGoals()">
 
         </p-button>
-      } @else if (match().status === 'Passando Agora') {
-        <div class="flex items-center gap-2.5 cursor-pointer group bg-surface-50 dark:bg-surface-800/50 hover:bg-surface-100 dark:hover:bg-surface-800 p-1.5 pr-3 rounded-xl border border-surface-200 dark:border-surface-700 hover:border-red-500/50 dark:hover:border-red-500/50 transition-all shadow-sm" (click)="openLink()">
+      } @else if (match().status === MatchStatus.LIVE) {
+        <div
+          class="flex items-center gap-2.5 cursor-pointer group bg-surface-50 dark:bg-surface-800/50 hover:bg-surface-100 dark:hover:bg-surface-800 p-1.5 pr-3 rounded-xl border border-surface-200 dark:border-surface-700 hover:border-red-500/50 dark:hover:border-red-500/50 transition-all shadow-sm"
+          (click)="openLink()">
           <div class="relative">
-            <img src="caze.png" alt="CazéTV Logo" class="w-12 rounded-lg shadow-sm group-hover:scale-105 transition-transform duration-300"/>
+            <img src="caze.png" alt="CazéTV Logo"
+                 class="w-12 rounded-lg shadow-sm group-hover:scale-105 transition-transform duration-300"/>
             <div class="absolute -top-1 -right-1 flex h-3 w-3">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 border-2 border-surface-0 dark:border-surface-800"></span>
+              <span
+                class="relative inline-flex rounded-full h-3 w-3 bg-red-500 border-2 border-surface-0 dark:border-surface-800"></span>
             </div>
           </div>
           <div class="flex flex-col justify-center">
-            <span class="text-[9px] text-surface-500 dark:text-surface-400 font-bold uppercase tracking-wider leading-none mb-1">Assista</span>
-            <span class="text-xs font-bold text-red-600 dark:text-red-400 flex items-center gap-1 group-hover:text-red-500 transition-colors">
+            <span
+              class="text-[9px] text-surface-500 dark:text-surface-400 font-bold uppercase tracking-wider leading-none mb-1">Assista</span>
+            <span
+              class="text-xs font-bold text-red-600 dark:text-red-400 flex items-center gap-1 group-hover:text-red-500 transition-colors">
               <i class="pi pi-youtube text-[10px]"></i> Ao Vivo
             </span>
           </div>
@@ -111,8 +115,7 @@
           <img
             [src]="'https://flagcdn.com/w20/' + match().team1.code + '.png'"
             class="w-5 shadow-sm rounded-sm"
-            onerror="this.src='https://flagcdn.com/w20/un.png'"
-          />
+            alt=""/>
           <span class="truncate">{{ match().team1.name }}</span>
         </div>
         @if (match().goals1?.length) {
@@ -133,8 +136,7 @@
           <img
             [src]="'https://flagcdn.com/w20/' + match().team2.code + '.png'"
             class="w-5 shadow-sm rounded-sm"
-            onerror="this.src='https://flagcdn.com/w20/un.png'"
-          />
+            alt=""/>
         </div>
         @if (match().goals2?.length) {
           @for (goal of match().goals2; track $index) {

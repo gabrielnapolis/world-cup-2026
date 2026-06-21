@@ -1,9 +1,9 @@
 <p-card
-  [class]="match().status === 'Passando Agora' ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : 'h-full border-none sm:border-solid !shadow-none sm:!shadow-sm'">
+  [class]="match().status === MatchStatus.LIVE ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : 'h-full border-none sm:border-solid !shadow-none sm:!shadow-sm'">
   <ng-template #header>
     <div class="flex justify-end items-center p-4 pb-0">
       <div class="flex items-center gap-2">
-        @if (match().status === 'Passando Agora') {
+        @if (match().status === MatchStatus.LIVE) {
           <span class="relative flex h-2.5 w-2.5">
                 <span
                   class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -21,7 +21,6 @@
         [src]="'https://flagcdn.com/w40/' + match().team1.code + '.png'"
         [alt]="match().team1.name + ' flag'"
         class="w-10 shadow-sm rounded-sm"
-        onerror="this.src='https://flagcdn.com/w40/un.png'"
       />
       <span class="text-lg truncate w-full" [title]="match().team1.name">
             {{ match().team1.name }}
@@ -37,7 +36,7 @@
           <div class="text-xs text-surface-400">
             {{ match().localDate | date:'dd/MM' }}
           </div>
-          <div class="text-[10px] text-surface-500 font-bold">
+          <div class="text-[12px] text-surface-500 font-bold">
             {{ shortDayOfWeek() }}
           </div>
         </div>
@@ -48,7 +47,7 @@
         <div class="text-xs text-surface-400">
           {{ match().localDate | date:'dd/MM' }}
         </div>
-        <div class="text-[10px] text-surface-500 font-bold">
+        <div class="text-[12px] text-surface-500 font-bold">
           {{ shortDayOfWeek() }}
         </div>
       }
@@ -59,7 +58,6 @@
         [src]="'https://flagcdn.com/w40/' + match().team2.code + '.png'"
         [alt]="match().team2.name + ' flag'"
         class="w-10 shadow-sm rounded-sm"
-        onerror="this.src='https://flagcdn.com/w40/un.png'"
       />
       <span class="text-lg truncate w-full" [title]="match().team2.name">
             {{ match().team2.name }}
