@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorldCupService } from '../../core/services/world-cup.service';
 import { GroupResult } from '../../core/models/match.model';
@@ -13,13 +13,23 @@ import { SearchInputComponent } from '../../shared/components/search-input/searc
 @Component({
   selector: 'app-group-stage',
   standalone: true,
-  imports: [CommonModule, TableModule, Button, Dialog, GroupHistoryCardComponent, RouterLink, SearchInputComponent],
+  imports: [
+    CommonModule,
+    TableModule,
+    Button,
+    Dialog,
+    GroupHistoryCardComponent,
+    RouterLink,
+    SearchInputComponent,
+  ],
   templateUrl: 'group-stage.component.html',
-  styles: [`
-    :host {
-      display: block;
-    }
-  `]
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+    `,
+  ],
 })
 export class GroupStageComponent implements OnInit {
   private worldCupService = inject(WorldCupService);
@@ -30,15 +40,13 @@ export class GroupStageComponent implements OnInit {
   selectedGroup = signal<string>('');
   selectedGroupMatches = signal<Match[]>([]);
 
-  // Computes the standings from all matches
   groupStandings = computed(() => {
     const matches = this.worldCupService.matches();
-    const groupMatches = matches.filter(m => m.group);
+    const groupMatches = matches.filter((m) => m.group);
 
-    // Group by groupName
     const groupsMap = new Map<string, Map<string, GroupResult>>();
 
-    groupMatches.forEach(match => {
+    groupMatches.forEach((match) => {
       if (!match.group) return;
 
       if (!groupsMap.has(match.group)) {
@@ -114,10 +122,8 @@ export class GroupStageComponent implements OnInit {
 
     if (!term) return standings;
 
-    return standings.filter(group =>
-      group.results.some(result =>
-        result.team.name.toLowerCase().includes(term)
-      )
+    return standings.filter((group) =>
+      group.results.some((result) => result.team.name.toLowerCase().includes(term)),
     );
   });
 
@@ -131,12 +137,24 @@ export class GroupStageComponent implements OnInit {
     return this.filteredStandings().length > this.limit();
   });
 
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    if (this.hasMoreGroups()) {
+      const pos =
+        (document.documentElement.scrollTop || document.body.scrollTop) + window.innerHeight;
+      const max = document.documentElement.scrollHeight;
+      if (pos >= max - 200) {
+        this.loadMore();
+      }
+    }
+  }
+
   loadMore() {
-    this.limit.update(val => val + 4);
+    this.limit.update((val) => val + 4);
   }
 
   showHistory(groupName: string) {
-    const matches = this.worldCupService.matches().filter(m => m.group === groupName);
+    const matches = this.worldCupService.matches().filter((m) => m.group === groupName);
     this.selectedGroupMatches.set(matches);
     this.selectedGroup.set(groupName);
     this.historyDialogVisible = true;
@@ -158,7 +176,7 @@ export class GroupStageComponent implements OnInit {
       goalsFor: 0,
       goalsAgainst: 0,
       goalDifference: 0,
-      points: 0
+      points: 0,
     };
   }
 }

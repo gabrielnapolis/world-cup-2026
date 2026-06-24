@@ -5,6 +5,13 @@
       Saldo de gols por jogador
     </h1>
   </div>
+  <div class="flex flex-col items-center gap-4 mb-8">
+    <app-search-input
+      [(value)]="searchTerm"
+      placeholder="Buscar jogador ou país"
+      class="flex w-full max-w-md">
+    </app-search-input>
+  </div>
 
   @if (topScorers().length === 0) {
     <div class="flex flex-col items-center justify-center p-12 bg-surface-900 rounded-xl border border-surface-800 text-center">
@@ -15,7 +22,7 @@
   } @else {
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       @for (scorer of visibleScorers(); track scorer.name + scorer.team.code) {
-        <p-card [styleClass]="scorer.goals === topScorers()[0].goals ? 'h-full bg-surface-900 border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : 'h-full bg-surface-900 border border-surface-800 shadow-sm hover:border-primary-500 transition-colors'">
+        <p-card [class]="scorer.goals === topScorers()[0].goals ? 'h-full bg-surface-900 border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' : 'h-full bg-surface-900 border border-surface-800 shadow-sm hover:border-primary-500 transition-colors'">
           <div class="flex flex-col items-center p-4">
 
             @if (scorer.goals === topScorers()[0].goals) {
@@ -47,8 +54,8 @@
     </div>
 
     @if (hasMore()) {
-      <div class="flex justify-center mt-8 mb-4">
-        <p-button label="Ver mais" icon="pi pi-plus" (onClick)="loadMore()" severity="secondary" rounded />
+      <div class="h-10 w-full flex justify-center items-center mt-8 mb-4">
+        <i class="pi pi-spinner pi-spin text-2xl text-surface-400"></i>
       </div>
     }
   }
