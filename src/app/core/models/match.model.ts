@@ -35,6 +35,7 @@ export interface Match {
   stadium: {
     name: string;
     city: string;
+    image?: string;
   };
 
   // Custom properties added for app logic

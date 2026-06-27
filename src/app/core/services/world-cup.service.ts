@@ -74,6 +74,25 @@ const TRANSLATIONS: Record<string, string> = {
   'Play-off for third place': 'Decisão do 3º Lugar',
 };
 
+const STADIUM_IMAGES: Record<string, string> = {
+  'Atlanta': 'atlanta.avif',
+  'Boston (Foxborough)': 'boston.avif',
+  'Dallas (Arlington)': 'dallas.avif',
+  'Guadalajara (Zapopan)': 'guadalajara.avif',
+  'Houston': 'houston.avif',
+  'Kansas City': 'kansas.avif',
+  'Los Angeles (Inglewood)': 'los-angeles.avif',
+  'Mexico City': 'cidade-do-mexico.avif',
+  'Miami (Miami Gardens)': 'miami.avif',
+  'Monterrey (Guadalupe)': 'monterrey.avif',
+  'New York/New Jersey (East Rutherford)': 'nova-york-e-nova-jersy.jpg',
+  'Philadelphia': 'filadelfia.avif',
+  'San Francisco Bay Area (Santa Clara)': 'san-francisco.avif',
+  'Seattle': 'seattle.avif',
+  'Toronto': 'toronto.avif',
+  'Vancouver': 'bc-place.avif'
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -360,6 +379,7 @@ export class WorldCupService {
         stadium: {
           name: m.ground,
           city: m.ground, // Depending on API
+          image: STADIUM_IMAGES[m.ground] || '',
         },
         score: m.score,
         goals1: m.goals1,

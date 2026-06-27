@@ -32,7 +32,7 @@ export class MatchCardComponent {
       case MatchStatus.LIVE: return 'success';
       case MatchStatus.SOON: return 'warn';
       case MatchStatus.TODAY: return 'success';
-      case MatchStatus.TOMORROW: return 'info';
+      case MatchStatus.TOMORROW: return 'contrast';
       case MatchStatus.FINISHED: return 'secondary';
       default: return 'contrast';
     }
