@@ -2,7 +2,6 @@ import { Component, computed, input } from '@angular/core';
 import { Match, MatchStatus } from '../../core/models/match.model';
 import { Card } from 'primeng/card';
 import { Tag } from 'primeng/tag';
-import { Divider } from 'primeng/divider';
 import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { CommonModule } from '@angular/common';
@@ -10,7 +9,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-match-card',
   standalone: true,
-  imports: [CommonModule, Card, Tag, Divider, Dialog, Button],
+  imports: [CommonModule, Card, Tag, Dialog, Button],
   templateUrl: 'match-card.component.html',
   styles: [`
     :host {
@@ -31,7 +30,7 @@ export class MatchCardComponent {
     switch (this.match().status) {
       case MatchStatus.LIVE: return 'success';
       case MatchStatus.SOON: return 'warn';
-      case MatchStatus.TODAY: return 'success';
+      case MatchStatus.TODAY: return 'contrast';
       case MatchStatus.TOMORROW: return 'contrast';
       case MatchStatus.FINISHED: return 'secondary';
       default: return 'contrast';
