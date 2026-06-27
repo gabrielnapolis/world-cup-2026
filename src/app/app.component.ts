@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Drawer } from 'primeng/drawer';
 import { Button } from 'primeng/button';
@@ -6,7 +7,7 @@ import { Button } from 'primeng/button';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Drawer, Button],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, Drawer, Button],
   templateUrl: './app.html',
   styles: [`
     :host {
@@ -19,4 +20,5 @@ import { Button } from 'primeng/button';
 export class AppComponent {
   title = 'world-cup';
   drawerVisible = signal(false);
+  siderVisible = signal(true);
 }
