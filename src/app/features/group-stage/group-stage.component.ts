@@ -143,8 +143,10 @@ export class GroupStageComponent implements OnInit {
       const pos =
         (document.documentElement.scrollTop || document.body.scrollTop) + window.innerHeight;
       const max = document.documentElement.scrollHeight;
-      if (pos >= max - 200) {
-        this.loadMore();
+      if (pos >= max - 10) {
+        setTimeout(() => {
+          this.loadMore();
+        }, 1000)
       }
     }
   }
