@@ -2,14 +2,8 @@
   <div class="flex flex-col items-center gap-4 cursor-pointer" routerLink="/">
     <img src="world-cup-white.png" alt="Copa 2026 Logo" class="w-40 md:w-60"/>
     <h1 class="text-xl font-bold tracking-tight text-surface-0 flex items-center gap-3">
-      Chave do mata-mata
+      Chaveamento do mata-mata
     </h1>
-    <p-message severity="info" class="text-sm">
-      <span class="flex items-center">
-        <i class="pi pi-info-circle mr-2"></i>
-        <span>Projeção com base na&nbsp;<strong>PONTUAÇÃO ATUAL</strong>&nbsp;da fase de grupos. As chaves exibidas ainda podem ser alteradas.</span>
-      </span>
-    </p-message>
   </div>
 
   <div class="relative bg-surface-900 border border-surface-800 rounded-xl overflow-hidden">
@@ -34,7 +28,7 @@
       <div class="bracket-container">
 
         <div class="bracket-col">
-          <div class="bracket-header">Segunda Fase</div>
+          <div class="bracket-header">Fase 16 Avos</div>
           <div class="bracket-matches">
             @for (m of leftR32(); track m.num) {
               <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>
@@ -107,7 +101,7 @@
           </div>
         </div>
         <div class="bracket-col">
-          <div class="bracket-header">Segunda Fase</div>
+          <div class="bracket-header">Fase 16 Avos</div>
           <div class="bracket-matches">
             @for (m of rightR32(); track m.num) {
               <app-bracket-match-card [match]="m" class="bracket-node"></app-bracket-match-card>

@@ -26,7 +26,7 @@ import {Match} from '../../core/models/match.model';
               } @else {
                 <div class="w-5 h-3.5 bg-surface-200 dark:bg-surface-600 rounded-sm"></div>
               }
-              <span class="truncate font-medium">{{ match().team1.name }}</span>
+              <span class="truncate">{{ match().team1.name }}</span>
             </div>
             @if (match().score?.ft) {
               <span class="font-bold ml-2">{{ match().score!.ft[0] }}</span>
@@ -42,7 +42,7 @@ import {Match} from '../../core/models/match.model';
               } @else {
                 <div class="w-5 h-3.5 bg-surface-200 dark:bg-surface-600 rounded-sm"></div>
               }
-              <span class="truncate font-medium">{{ match().team2.name }}</span>
+              <span class="truncate">{{ match().team2.name }}</span>
             </div>
             @if (match().score?.ft) {
               <span class="font-bold ml-2">{{ match().score!.ft[1] }}</span>

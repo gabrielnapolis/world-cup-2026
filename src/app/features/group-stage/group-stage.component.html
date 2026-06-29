@@ -1,14 +1,25 @@
 <div class="flex flex-col gap-6 py-8 px-4 max-w-7xl mx-auto">
   <div class="flex justify-center cursor-pointer" routerLink="/">
     <img src="world-cup-white.png" alt="Copa 2026 Logo" class="w-40 md:w-60"/>
+
   </div>
   <div class="flex flex-col items-center gap-4">
     <h1 class="text-2xl font-bold m-0">Fase de Grupos</h1>
+    <p-message severity="info" class="text-sm">
+      <span class="flex items-center">
+        <i class="pi pi-info-circle mr-2"></i>
+        <span>Fase de Grupos <strong>ENCERRADA</strong>&nbsp;</span>
+      </span>
+    </p-message>
+
     <app-search-input
       [(value)]="searchTerm"
       placeholder="Buscar seleção"
       class="flex w-full max-w-md">
     </app-search-input>
+
+
+
   </div>
 
 

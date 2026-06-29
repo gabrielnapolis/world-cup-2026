@@ -9,6 +9,7 @@ import { GroupHistoryCardComponent } from '../group-history-card/group-history-c
 import { Match } from '../../core/models/match.model';
 import { RouterLink } from '@angular/router';
 import { SearchInputComponent } from '../../shared/components/search-input/search-input.component';
+import {Message} from 'primeng/message';
 
 @Component({
   selector: 'app-group-stage',
@@ -21,6 +22,7 @@ import { SearchInputComponent } from '../../shared/components/search-input/searc
     GroupHistoryCardComponent,
     RouterLink,
     SearchInputComponent,
+    Message,
   ],
   templateUrl: 'group-stage.component.html',
   styles: [
