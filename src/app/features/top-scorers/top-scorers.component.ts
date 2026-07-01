@@ -35,7 +35,7 @@ export class TopScorersComponent {
     );
   });
 
-  limit = signal(8);
+  limit = signal(4);
 
   visibleScorers = computed(() => {
     return this.filteredScorers().slice(0, this.limit());
@@ -98,12 +98,12 @@ export class TopScorersComponent {
       if (pos >= max - 50) {
         setTimeout(() => {
           this.loadMore();
-        }, 1000)
+        }, 2000)
       }
     }
   }
 
   loadMore() {
-    this.limit.update(val => val + 8);
+    this.limit.update(val => val + 2);
   }
 }
