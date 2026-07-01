@@ -65,7 +65,7 @@ const TRANSLATIONS: Record<string, string> = {
   Turkey: 'Turquia',
   Ghana: 'Gana',
   Austria: 'Áustria',
-  'Round of 32': 'Segunda Fase',
+  'Round of 32': 'Fase 16 Avos',
   'Round of 16': 'Oitavas de Final',
   'Quarter-final': 'Quartas de Final',
   'Semi-finals': 'Semifinais',
