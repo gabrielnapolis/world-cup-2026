@@ -18,11 +18,6 @@ import { Button } from 'primeng/button';
   `]
 })
 export class AppComponent {
-  title = 'world-cup';
   drawerVisible = signal(false);
   siderVisible = signal(true);
-
-  openLink() {
-    window.open('https://www.linkedin.com/in/gabriel-napolis/', '_blank');
-  }
 }
