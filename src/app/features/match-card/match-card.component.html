@@ -1,5 +1,5 @@
 <p-card
-  [class]="match().status === MatchStatus.LIVE ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' :
+  [ngClass]="match().status === MatchStatus.LIVE ? 'h-full border-2 border-green-500/80 shadow-[0_0_15px_rgba(34,197,94,0.15)] relative overflow-hidden transition-all' :
    match().status === MatchStatus.SOON ? 'h-full border-2 border-yellow-500/80 shadow-[0_0_15px_rgba(234,179,8,0.15)] relative overflow-hidden transition-all' : 'h-full'">
   <ng-template #header>
     <div class="relative w-full h-44 rounded-t-xl overflow-hidden">
